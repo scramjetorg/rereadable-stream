@@ -1,4 +1,4 @@
-const {Writable, PassThrough} = require('stream');
+const {Writable, Readable} = require('stream');
 
 class ReReadable extends Writable {
 
@@ -12,18 +12,20 @@ class ReReadable extends Writable {
 
         super(options);
 
+        this._readableOptions = options;
+
         this._highWaterMark = options.highWaterMark;
         this._bufArrLength = options.length;
 
-        this.bufArr = [];
+        this._bufArr = [];
         this.hiBufCr = 0;
         this.loBufCr = 0;
         this._waiting = null;
     }
 
     _write(chunk, encoding, callback) {
-        this.bufArr.push([chunk, encoding]);
-        if (this.bufArr.length > this._bufArrLength) {
+        this._bufArr.push([chunk, encoding]);
+        if (this._bufArr.length > this._bufArrLength) {
             this._waiting = callback;
             this.drop();
         } else {
@@ -32,8 +34,8 @@ class ReReadable extends Writable {
     }
 
     _writev(chunks, callback) {
-        this.bufArr.push(...chunks.map(({chunk, encoding}) => [chunk, encoding]));
-        if (this.bufArr.length > this._bufArrLength) {
+        this._bufArr.push(...chunks.map(({chunk, encoding}) => [chunk, encoding]));
+        if (this._bufArr.length > this._bufArrLength) {
             this._waiting = callback;
             this.drop();
         } else {
@@ -52,8 +54,8 @@ class ReReadable extends Writable {
     }
 
     drop() {
-        if (this.bufArr.length > this._bufArrLength) {
-            const dropped = this._bufArrLength.splice(0, this.bufArr.length - this._bufArrLength).length;
+        if (this._bufArr.length > this._bufArrLength) {
+            const dropped = this._bufArr.splice(0, this._bufArr.length - this._bufArrLength).length;
             this.emit("drop", dropped);
         }
     }
@@ -63,20 +65,20 @@ class ReReadable extends Writable {
     }
 
     tail(count) {
-        const ret = new PassThrough({
+        const ret = new Readable(Object.assign(this._readableOptions, {
             read: () => {
                 while(
-                    ret.bufCr < this.bufArr.length &&          // while there's anything to read
-                    ret.push(...this.bufArr[ret.bufCr])        // and there's willing to read more
+                    ret.bufCr < this._bufArr.length &&          // while there's anything to read
+                    ret.push(...this._bufArr[ret.bufCr])        // and there's willing to read more
                 ) {
                     ret.bufCr++;                               // go on.
                 }
 
                 this.updateBufPosition(ret.bufCr);
             }
-        });
+        }));
 
-        ret.bufCr = count > 0 ? this.bufArr - count : 0;
+        ret.bufCr = count > 0 ? this._bufArr - count : 0;
 
         this.on("drop", (count) => {
             ret.bufCr -= count;
