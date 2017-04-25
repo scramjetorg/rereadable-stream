@@ -4,7 +4,7 @@
   "description": "A simple standards-based stream that can be read again from begining.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/nodeunit test/object-mode.js"
   },
   "author": "",
   "license": "GPL-3.0",

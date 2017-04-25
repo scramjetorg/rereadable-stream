@@ -1,4 +1,4 @@
-const ReReadable = require("../");
+const {ReReadable} = require("../");
 const {Readable} = require('stream');
 
 module.exports = {
