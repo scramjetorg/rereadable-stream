@@ -31,6 +31,7 @@ class ReReadable extends Writable {
         } else {
             callback();
         }
+        this.emit("wrote");
     }
 
     _writev(chunks, callback) {
@@ -41,6 +42,7 @@ class ReReadable extends Writable {
         } else {
             callback();
         }
+        this.emit("wrote");
     }
 
     updateBufPosition(bufCr) {
@@ -54,10 +56,8 @@ class ReReadable extends Writable {
     }
 
     drop() {
-        if (this._bufArr.length > this._bufArrLength) {
-            const dropped = this._bufArr.splice(0, this._bufArr.length - this._bufArrLength).length;
-            this.emit("drop", dropped);
-        }
+        if (this._bufArr.length > this._bufArrLength)
+            this.emit("drop", this._bufArr.splice(0, this._bufArr.length - this._bufArrLength).length);
     }
 
     rewind() {
@@ -67,14 +67,16 @@ class ReReadable extends Writable {
     tail(count) {
         const ret = new Readable(Object.assign(this._readableOptions, {
             read: () => {
-                while(
-                    ret.bufCr < this._bufArr.length &&          // while there's anything to read
-                    ret.push(...this._bufArr[ret.bufCr])        // and there's willing to read more
-                ) {
-                    ret.bufCr++;                               // go on.
+                if (ret.bufCr < this._bufArr.length) {
+                    while(ret.bufCr < this._bufArr.length) {                // while there's anything to read
+                        const resp = ret.push(...this._bufArr[ret.bufCr]);        // push to readable
+                        ret.bufCr++;                                        // update the docs
+                        if (!resp) break;                                   // until there's not willing to read
+                    }
+                    this.updateBufPosition(ret.bufCr);
+                } else {
+                    this.once("wrote", ret._read);
                 }
-
-                this.updateBufPosition(ret.bufCr);
             }
         }));
 
@@ -83,7 +85,7 @@ class ReReadable extends Writable {
         this.on("drop", (count) => {
             ret.bufCr -= count;
             if (ret.bufCr < 0) {
-                ret.emit("drop", -ret.bufCr);
+                ret.emit("drop", count);
                 ret.bufCr = 0;
             }
         });
