@@ -5,9 +5,9 @@ class ReReadable extends Writable {
     constructor(options) {
 
         options = Object.assign({
-            length: 1e3,
-            dropInterval: 1e3,
-            highWaterMark: 32
+            length: 1048576,
+            highWaterMark: 32,
+            dropInterval: 1e3
         }, options);
 
         super(options);
@@ -94,4 +94,4 @@ class ReReadable extends Writable {
     }
 }
 
-module.exports = ReReadable;
+module.exports = {ReReadable};
