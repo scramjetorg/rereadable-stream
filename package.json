@@ -4,11 +4,11 @@
   "description": "A simple standards-based stream that can be read again from begining.",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/nodeunit test/object-mode.js"
+    "test": "nodeunit test/object-mode.js"
   },
   "author": "Signicode <opensource@signicode.com>",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "devDependencies": {
-    "nodeunit": "^0.11.0"
+    "nodeunit": "^0.11.2"
   }
 }

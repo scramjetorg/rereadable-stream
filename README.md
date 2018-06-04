@@ -29,11 +29,11 @@ If one of readable stream cannot cope with the speed of other streams `drop` eve
     rewound.on("drop", (count) => console.log(`dropped ${count} items`));
 
 **Notice:** For version 1.0.0 only object streams are well tested. There's no reason why buffer stream should not work, but they won't
-follow any sensible limits. This will be fixed in 1.1.0.
+follow any sensible limits. This will be fixed in 1.2.0.
 
 License
 --------
 
-See LICENSE (GNU GENERAL PUBLIC LICENSE).
+See LICENSE (MIT).
 
-For other licensing options please open an issue or contact the author at cz (at) signicode.com
+For other licensing options please open an issue or contact the author at opensource (at) signicode.com
