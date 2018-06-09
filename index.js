@@ -21,6 +21,8 @@ class ReReadable extends Writable {
         this.hiBufCr = 0;
         this.loBufCr = 0;
         this._waiting = null;
+        this._ended = new Promise((res) => this.on("finish", res));
+
     }
 
     _write(chunk, encoding, callback) {
@@ -65,27 +67,33 @@ class ReReadable extends Writable {
     }
 
     tail(count) {
+        let end = false;
+        this._ended.then(() => ret._read(end = true));
+
         const ret = new Readable(Object.assign(this._readableOptions, {
             read: () => {
                 if (ret.bufCr < this._bufArr.length) {
-                    while(ret.bufCr < this._bufArr.length) {                // while there's anything to read
-                        const resp = ret.push(...this._bufArr[ret.bufCr]);        // push to readable
-                        ret.bufCr++;                                        // update the docs
-                        if (!resp) break;                                   // until there's not willing to read
+                    while(ret.bufCr < this._bufArr.length) {               // while there's anything to read
+                        const resp = ret.push(...this._bufArr[ret.bufCr]); // push to readable
+                        ret.bufCr++;                                       // update the position
+                        if (!resp && !end) break;                          // until there's not willing to read and we're not ended
                     }
                     this.updateBufPosition(ret.bufCr);
-                } else {
+                } else if (!end) {
                     this.once("wrote", ret._read);
                 }
+
+                if (end)
+                    ret.push(null);
             }
         }));
 
-        ret.bufCr = count > 0 ? this._bufArr - count : 0;
+        ret.bufCr = count < this._bufArr.length && count > 0 ? this._bufArr.length - count : 0;
 
         this.on("drop", (count) => {
             ret.bufCr -= count;
             if (ret.bufCr < 0) {
-                ret.emit("drop", count);
+                ret.emit("drop", -ret.bufCr);
                 ret.bufCr = 0;
             }
         });

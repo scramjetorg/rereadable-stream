@@ -1,7 +1,49 @@
 const {ReReadable} = require("../");
 const {Readable} = require('stream');
 
+const trace = (value, ...args) => {
+    console.log('trace', value, ...args);
+    return value;
+};
+
 module.exports = {
+    test_ends(test) {
+        test.expect(9);
+
+        const writableSide = new ReReadable({objectMode: true, length: 3, highWaterMark: 2});
+
+        const rewound1 = writableSide.tail(-1);
+        const ended1 = new Promise((res, rej) => (
+                rewound1.on('end', () => res()),
+                rewound1.on('error', rej)
+            ))
+            .then(() => test.ok(1, "Rewound1 should end"));
+        test.equals(rewound1.read(), null, "Should not return anything to read");
+
+        writableSide.write(1);
+        writableSide.end(2);
+
+        const rewound2 = writableSide.tail(-1);
+        const ended2 = new Promise((res, rej) => (
+                rewound2.on('end', () => res()),
+                rewound2.on('error', () => rej)
+            ))
+            .then(() => test.ok(1, "Rewound2 should end"));
+
+        test.equals(rewound1.read(), 1, "Rewound1 should read chunk 1");
+        test.equals(rewound2.read(), 1, "Rewound2 should read chunk 1 as well");
+
+        test.equals(rewound1.read(), 2, "Rewound1 should read chunk 2");
+        test.equals(rewound2.read(), 2, "Rewound2 should read chunk 2");
+
+        test.equals(rewound1.read(), null, "Rewound1 should reach end");
+        test.equals(rewound2.read(), null, "Rewound2 should reach end");
+
+        rewound1.resume();
+        rewound2.resume();
+
+        return Promise.all([ended1, ended2]).then(()=> test.done(), (e) => (console.error(e.message), test.done()));
+    },
     test_highWaterMark(test) {
         const writableSide = new ReReadable({objectMode: true, length: 3, highWaterMark: 2});
 
