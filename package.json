@@ -4,7 +4,7 @@
   "description": "A simple standards-based stream that can be read again from begining.",
   "main": "index.js",
   "scripts": {
-    "test": "nodeunit test/object-mode.js"
+    "test": "nodeunit test/object-mode.js --reporter=verbose"
   },
   "author": "Signicode <opensource@signicode.com>",
   "license": "MIT",
