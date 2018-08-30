@@ -1,4 +1,4 @@
-const {Writable, Readable} = require('stream');
+const {Writable, Readable} = require("stream");
 
 class ReReadable extends Writable {
 
