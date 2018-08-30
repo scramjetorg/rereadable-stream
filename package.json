@@ -1,6 +1,6 @@
 {
   "name": "rereadable-stream",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A simple standards-based stream that can be read again from begining.",
   "main": "index.js",
   "engines": {
