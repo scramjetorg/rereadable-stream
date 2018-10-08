@@ -76,10 +76,9 @@ class ReReadable extends Writable {
         const ret = new Readable(Object.assign(this._readableOptions, {
             read: () => {
                 if (ret.bufCr < this._bufArr.length) {
-                    while(ret.bufCr < this._bufArr.length) {               // while there's anything to read
-                        const resp = ret.push(...this._bufArr[ret.bufCr]); // push to readable
-                        ret.bufCr++;                                       // update the position
-                        if (!resp && !end) break;                          // until there's not willing to read and we're not ended
+                    while(ret.bufCr < this._bufArr.length) {                 // while there's anything to read
+                        const resp = ret.push(...this._bufArr[ret.bufCr++]); // push to readable
+                        if (!resp && !end) break;                            // until there's not willing to read and we're not ended
                     }
                     this.updateBufPosition(ret.bufCr);
                 } else if (!end) {
