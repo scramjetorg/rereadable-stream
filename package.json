@@ -13,6 +13,10 @@
   },
   "author": "Signicode <opensource@signicode.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/signicode/rereadable-stream.git"
+  },
   "devDependencies": {
     "eslint": "^5.6.1",
     "eslint-plugin-node": "^7.0.1",
