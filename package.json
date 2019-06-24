@@ -17,7 +17,7 @@
     "type": "git",
     "url": "git://github.com/signicode/rereadable-stream.git"
   },
-  "typings": "./index.d.ts",
+  "types": "./index.d.ts",
   "devDependencies": {
     "eslint": "^5.16.0",
     "eslint-config-scramjet": "^1.0.4",
