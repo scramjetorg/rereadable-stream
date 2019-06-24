@@ -1,4 +1,4 @@
-import { Writable, WritableOptions, Readable } from 'stream';
+import { Writable, WritableOptions, Readable } from "stream";
 
 export class ReReadable extends Writable {
     constructor(options?: { length: number } & WritableOptions);
