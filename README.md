@@ -7,12 +7,14 @@ point in time and start reading from the begining.
 
 Usage:
 
-    const {ReReadable} = require("rereadable-stream");
+```js
+const {ReReadable} = require("rereadable-stream");
 
-    let rereadable = fs.createReadStream("myfile")
-        .pipe(new ReReadable(options));
+let rereadable = fs.createReadStream("myfile")
+    .pipe(new ReReadable(options));
 
-    srv.on("connection", (sock) => sock.pipe(rereadable.rewind()));
+srv.on("connection", (sock) => sock.pipe(rereadable.rewind()));
+```
 
 The module exposes a simple API on as an extension a standard Writable stream:
 
@@ -26,7 +28,9 @@ The options are:
 
 If one of readable stream cannot cope with the speed of other streams `drop` events will be emitted to inform about it.
 
-    rewound.on("drop", (count) => console.log(`dropped ${count} items`));
+```js
+rewound.on("drop", (count) => console.log(`dropped ${count} items`));
+```
 
 **Notice:** For version 1.0.0 only object streams are well tested. There's no reason why buffer stream should not work, but they won't
 follow any sensible limits. This will be fixed in 1.2.0.
