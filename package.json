@@ -23,5 +23,9 @@
     "eslint": "^7.8.1",
     "eslint-config-scramjet": "^2.0.1",
     "nodeunit-tape-compat": "^1.3.58"
-  }
+  },
+  "files": [
+    "index.d.ts",
+    "index.js"
+  ]
 }
