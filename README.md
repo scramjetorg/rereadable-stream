@@ -10,7 +10,7 @@ Usage:
     const {ReReadable} = require("rereadable-stream");
 
     let rereadable = fs.createReadStream("myfile")
-        .pipe(new Rereadable(options));
+        .pipe(new ReReadable(options));
 
     srv.on("connection", (sock) => sock.pipe(rereadable.rewind()));
 
