@@ -11,11 +11,11 @@
     "tape": "nodeunit-tape test/object-mode.js",
     "test": "npm run lint && npm run tape"
   },
-  "author": "Signicode <opensource@signicode.com>",
+  "author": "Scramjet <opensource@scramjet.org>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/signicode/rereadable-stream.git"
+    "url": "git://github.com/scramjetorg/rereadable-stream.git"
   },
   "types": "./index.d.ts",
   "devDependencies": {
