@@ -11,18 +11,18 @@
     "tape": "nodeunit-tape test/object-mode.js",
     "test": "npm run lint && npm run tape"
   },
-  "author": "Signicode <opensource@signicode.com>",
+  "author": "Scramjet <opensource@scramjet.org>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/signicode/rereadable-stream.git"
+    "url": "git://github.com/scramjetorg/rereadable-stream.git"
   },
   "types": "./index.d.ts",
   "devDependencies": {
-    "@types/node": "^14.14.22",
-    "eslint": "^7.19.0",
+    "@types/node": "^14.14.35",
+    "eslint": "^7.22.0",
     "eslint-config-scramjet": "^3.0.0",
-    "nodeunit-tape-compat": "^1.3.68"
+    "nodeunit-tape-compat": "^1.3.70"
   },
   "files": [
     "index.d.ts",
