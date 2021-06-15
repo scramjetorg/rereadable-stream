@@ -19,10 +19,10 @@
   },
   "types": "./index.d.ts",
   "devDependencies": {
-    "@types/node": "^15.3.0",
-    "eslint": "^7.26.0",
+    "@types/node": "^15.12.2",
+    "eslint": "^7.28.0",
     "eslint-config-scramjet": "^3.0.0",
-    "nodeunit-tape-compat": "^1.3.77"
+    "nodeunit-tape-compat": "^1.3.78"
   },
   "files": [
     "index.d.ts",
